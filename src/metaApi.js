@@ -217,16 +217,13 @@ export async function getPageAccessToken(pageId) {
     throw new Error('Missing user token. Please connect Facebook again.');
   }
 
-  const data = await graphFetchWithToken(
-    `/me/accounts?fields=id,name,access_token&limit=25&access_token=${encodeURIComponent(userToken)}`,
+  const page = await graphFetchWithToken(
+    `/${pageId}?fields=id,name,access_token&access_token=${encodeURIComponent(userToken)}`,
     userToken
   );
 
-  const pages = Array.isArray(data?.data) ? data.data : [];
-  const page = pages.find((p) => String(p.id) === String(pageId));
-
   if (!page) {
-    throw new Error(`Không tìm thấy page ${pageId} trong /me/accounts`);
+    throw new Error(`Không tìm thấy page ${pageId}`);
   }
 
   if (!page.access_token) {
