@@ -218,7 +218,7 @@ export async function getPageAccessToken(pageId) {
   }
 
   const data = await graphFetchWithToken(
-    `/me/accounts?fields=id,name,access_token&limit=200&access_token=${encodeURIComponent(userToken)}`,
+    `/me/accounts?fields=id,name,access_token&limit=25&access_token=${encodeURIComponent(userToken)}`,
     userToken
   );
 
@@ -240,7 +240,7 @@ export async function getPageAccessToken(pageId) {
   };
 }
 
-export async function listPagePostsWithPageToken(pageId, pageAccessToken, limit = 10) {
+export async function listPagePostsWithPageToken(pageId, pageAccessToken, limit = 1) {
   return graphFetchWithToken(
     `/${pageId}/posts?fields=id,message,created_time,permalink_url,status_type&limit=${limit}&access_token=${encodeURIComponent(pageAccessToken)}`,
     pageAccessToken
