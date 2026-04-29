@@ -711,7 +711,9 @@ app.get('/auth/facebook/start', (_req, res) => {
     'ads_management',
     'ads_read',
     'pages_show_list',
-    'pages_read_engagement'
+    'pages_read_engagement',
+    'pages_manage_ads',
+    'business_management'
   ].join(',');
 
   const authUrl =
