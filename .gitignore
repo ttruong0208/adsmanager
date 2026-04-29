@@ -1,0 +1,8 @@
+
+.env
+node_modules/
+data/
+backend/data/
+
+node_modules/
+data/

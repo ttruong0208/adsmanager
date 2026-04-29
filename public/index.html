@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bot Ads Manager</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --success: #16a34a;
+        --warning-bg: #fff7ed;
+        --warning-border: #fdba74;
+        --warning-text: #9a3412;
+        --input-bg: #ffffff;
+        --status-bg: #f8fafc;
+        --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        --radius: 14px;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .page {
+        min-height: 100vh;
+        padding: 24px;
+      }
+
+      .app {
+        max-width: 760px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 14px;
+      }
+
+      .hero {
+        padding: 16px;
+        background: linear-gradient(135deg, #eff6ff, #ecfeff);
+      }
+
+      .hero h3 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.2;
+      }
+
+      .hero .sub {
+        margin-top: 6px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .auth-box {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        background: #fafafa;
+      }
+
+      .auth-title {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .auth-status {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      .auth-status.ok {
+        color: var(--success);
+        font-weight: 700;
+      }
+
+      .auth-status.warn {
+        color: var(--warning-text);
+        font-weight: 700;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 13px;
+        border-radius: 10px;
+      }
+
+      input,
+      select,
+      textarea {
+        margin: 0;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        background: var(--input-bg);
+        color: var(--text);
+        outline: none;
+      }
+      
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #93c5fd;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.45;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      button {
+        border: 0;
+        padding: 11px 12px;
+        cursor: pointer;
+        transition: 0.18s ease;
+      }
+
+      button.primary {
+        background: var(--primary);
+        color: #fff;
+        font-weight: 700;
+      }
+
+      button.primary:hover {
+        background: var(--primary-hover);
+      }
+
+      button.secondary {
+        background: #eef2ff;
+        color: #1e3a8a;
+        font-weight: 700;
+      }
+
+      button.secondary:hover {
+        background: #e0e7ff;
+      }
+
+      button.ghost {
+        background: #f3f4f6;
+        color: #111827;
+        font-weight: 700;
+      }
+
+      button.ghost:hover {
+        background: #e5e7eb;
+      }
+
+      .status {
+        padding: 12px;
+        border-radius: 12px;
+        background: var(--status-bg);
+        border: 1px solid var(--line);
+        font-size: 12px;
+        white-space: pre-wrap;
+        max-height: 320px;
+        overflow: auto;
+        line-height: 1.45;
+      }
+
+      .warning-box {
+        border: 1px solid var(--warning-border);
+        background: var(--warning-bg);
+        color: var(--warning-text);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .log-line {
+  padding: 6px 0;
+  line-height: 1.5;
+  border-bottom: 1px dashed #eef2f7;
+}
+
+.log-line:last-child {
+  border-bottom: 0;
+}
+
+.log-success {
+  color: #166534;
+  font-weight: 600;
+}
+
+.log-error {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.log-running {
+  color: #92400e;
+  font-weight: 600;
+}
+
+.log-section {
+  color: #1d4ed8;
+  font-weight: 700;
+  padding-top: 10px;
+}
+
+.log-link a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.log-link a:hover {
+  text-decoration: underline;
+}
+
+.log-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 10px 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="app">
+        <div class="card hero">
+          <h3>Bot Ads Manager</h3>
+          <div class="sub">Tạo campaign, ad set, chọn post và publish theo full flow.</div>
+        </div>
+        <div class="card">
+          <div class="auth-box auth-box-has-avatar">
+            <div class="fb-avatar-wrap" id="fbAvatarWrap" style="display:none;">
+              <img id="fbAvatar" class="fb-avatar" src="" alt="Facebook Avatar" />
+            </div>
+        
+            <div class="auth-title">Kết nối Facebook</div>
+            <div id="authStatus" class="auth-status">Đang kiểm tra trạng thái kết nối...</div>
+            <div id="fbIdentity" class="hint" style="display:none;"></div>
+        
+            <button id="loginFacebookBtn" type="button" class="secondary">
+              Đăng nhập Facebook
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="grid">
+            <div>
+              <label for="backendUrl">Backend URL</label>
+              <input id="backendUrl" value="https://ads-production-65a3.up.railway.app" />
+            </div>
+
+            <div>
+              <label for="adAccountId">Ad Account ID</label>
+              <input id="adAccountId" value="act_1438369167333697" />
+            </div>
+
+            <div>
+              <label for="objective">Objective</label>
+              <select id="objective">
+                <option value="OUTCOME_ENGAGEMENT">OUTCOME_ENGAGEMENT</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="postId">Post ID dùng cho ad</label>
+              <input id="postId" placeholder="123456789_987654321" />
+              <div class="hint">Để trống nếu muốn backend tự chọn bài viết hợp lệ đầu tiên.</div>
+            </div>
+
+            <div>
+              <label for="defaultPageName">Page Name dùng chung</label>
+              <input id="defaultPageName" placeholder="Để trống để lấy pageName = pageId" />
+              <div class="hint">Nếu để trống, mỗi page sẽ tự dùng pageId làm pageName.</div>
+            </div>
+
+            <div>
+              <label for="defaultBudget">Budget áp dụng cho tất cả pageId</label>
+              <input id="defaultBudget" type="number" min="1" value="100" placeholder="100" />
+              <div class="hint">Ví dụ nhập 100 thì toàn bộ danh sách pageId sẽ chạy budget 100.</div>
+            </div>
+
+            <div>
+              <label for="batchInput">Danh sách pageId</label>
+              <textarea id="batchInput" placeholder="61551441819219
+123456789012345
+987654321098765"></textarea>
+              <div class="hint">Mỗi dòng 1 pageId. Không cần nhập pageName và budget trong danh sách.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="warning-box">
+          Flow hiện tại ưu tiên API. Website chỉ gọi backend, không phụ thuộc UI Ads Manager.
+        </div>
+
+        <div class="actions">
+          <button id="runFullFlowBtn" class="primary">Chạy full luồng 1-7</button>
+          <button id="openAdsManagerBtn" class="ghost">Mở Ads Manager</button>
+        </div>
+
+        <div id="status" class="status">Chưa chạy.</div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
