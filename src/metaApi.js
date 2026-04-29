@@ -247,7 +247,6 @@ export async function listPagePostsWithPageToken(pageId, pageAccessToken, limit 
   );
 }
 
-
 export async function pickFirstValidPostAndCreateAd({
   adAccountId,
   adSetId,
@@ -257,11 +256,8 @@ export async function pickFirstValidPostAndCreateAd({
 }) {
   const pageInfo = await getPageAccessToken(pageId);
 
-
   const postsRes = await listPagePostsWithPageToken(pageId, pageInfo.accessToken, limit);
   const posts = Array.isArray(postsRes?.data) ? postsRes.data : [];
-
-
 
   if (!posts.length) {
     throw new Error(`Không tìm thấy post nào của page ${pageId}`);
@@ -271,12 +267,6 @@ export async function pickFirstValidPostAndCreateAd({
 
   for (let i = 0; i < posts.length; i++) {
     const post = posts[i];
-    console.log('[PHASE6] try post', {
-      index: i + 1,
-      id: post.id,
-      created_time: post.created_time,
-      permalink_url: post.permalink_url
-    });
 
     try {
       const ad = await createAdDraftWithObjectStoryId({
@@ -285,8 +275,6 @@ export async function pickFirstValidPostAndCreateAd({
         adName,
         objectStoryId: post.id
       });
-
-  
 
       return {
         ok: true,
@@ -301,12 +289,6 @@ export async function pickFirstValidPostAndCreateAd({
         ad
       };
     } catch (err) {
-      console.log('[PHASE6] fail post', {
-        index: i + 1,
-        id: post.id,
-        error: err.message
-      });
-
       tried.push({
         index: i + 1,
         postId: post.id,
