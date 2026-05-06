@@ -4,85 +4,233 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bot Ads Manager</title>
+
     <style>
       :root {
-        --bg: #f5f7fb;
+        --bg: #f7f9fc;
+        --sidebar: #ffffff;
         --card: #ffffff;
-        --text: #111827;
-        --muted: #6b7280;
-        --line: #e5e7eb;
+        --text: #0f172a;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --soft-line: #eef2f7;
         --primary: #2563eb;
         --primary-hover: #1d4ed8;
+        --primary-soft: #eff6ff;
         --success: #16a34a;
+        --danger: #dc2626;
         --warning-bg: #fff7ed;
-        --warning-border: #fdba74;
-        --warning-text: #9a3412;
+        --warning-border: #fed7aa;
+        --warning-text: #c2410c;
         --input-bg: #ffffff;
         --status-bg: #f8fafc;
-        --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-        --radius: 14px;
+        --shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+        --radius: 18px;
+        --radius-sm: 12px;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
       body {
-        font-family: Arial, sans-serif;
         margin: 0;
-        background: var(--bg);
+        font-family: Inter, Arial, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+          linear-gradient(180deg, #ffffff 0%, var(--bg) 42%);
         color: var(--text);
       }
 
-      .page {
+      .shell {
         min-height: 100vh;
-        padding: 24px;
+        display: grid;
+        grid-template-columns: 74px minmax(0, 1fr);
       }
 
-      .app {
-        max-width: 760px;
-        margin: 0 auto;
+      .sidebar {
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(14px);
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px 10px;
+        gap: 14px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #fff;
+        font-size: 22px;
+        box-shadow: 0 10px 22px rgba(37, 99, 235, 0.26);
+      }
+
+      .nav-item {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        color: #334155;
+        background: transparent;
+        font-size: 19px;
+      }
+
+      .nav-item.active {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .sidebar-spacer {
+        flex: 1;
+      }
+
+      .main {
+        min-width: 0;
+        padding: 22px 24px 28px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      .title h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+      }
+
+      .title p {
+        margin: 7px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .system-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border: 1px solid var(--soft-line);
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+      }
+
+      .user-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: var(--primary);
+        background: var(--primary-soft);
+        border: 1px solid #bfdbfe;
+        font-size: 22px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 390px minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .left,
+      .right {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--soft-line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .card-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: var(--primary-soft);
+        color: var(--primary);
+        font-size: 17px;
+        flex: 0 0 auto;
+      }
+
+      .card-title {
+        font-size: 16px;
+        line-height: 1.25;
+        font-weight: 850;
+        margin: 0;
+      }
+
+      .card-subtitle {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+        margin: 5px 0 0;
+      }
+
+      .auth-box {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+        background: #fbfdff;
         display: flex;
         flex-direction: column;
         gap: 12px;
       }
 
-      .card {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 14px;
-      }
-
-      .hero {
-        padding: 16px;
-        background: linear-gradient(135deg, #eff6ff, #ecfeff);
-      }
-
-      .hero h3 {
-        margin: 0;
-        font-size: 28px;
-        line-height: 1.2;
-      }
-
-      .hero .sub {
-        margin-top: 6px;
-        font-size: 14px;
-        color: var(--muted);
-      }
-
-      .auth-box {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 12px;
-        background: #fafafa;
-      }
-
       .auth-title {
-        font-size: 13px;
-        font-weight: 700;
+        font-size: 12px;
+        font-weight: 800;
+        color: #1e293b;
       }
 
       .auth-status {
@@ -93,25 +241,55 @@
 
       .auth-status.ok {
         color: var(--success);
-        font-weight: 700;
+        font-weight: 800;
       }
 
       .auth-status.warn {
-        color: var(--warning-text);
-        font-weight: 700;
+        color: var(--danger);
+        font-weight: 800;
       }
 
       .grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 14px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px 18px;
+      }
+
+      .full {
+        grid-column: 1 / -1;
       }
 
       label {
         display: block;
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 4px;
+        font-size: 12px;
+        font-weight: 850;
+        margin-bottom: 7px;
+        color: #0f172a;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        font-size: 14px;
+        pointer-events: none;
+      }
+
+      .input-wrap input,
+      .input-wrap select {
+        padding-left: 38px;
       }
 
       input,
@@ -121,233 +299,415 @@
         width: 100%;
         box-sizing: border-box;
         font-size: 13px;
-        border-radius: 10px;
+        border-radius: 12px;
       }
 
       input,
       select,
       textarea {
         margin: 0;
-        padding: 10px 12px;
-        border: 1px solid #d1d5db;
+        padding: 12px 13px;
+        border: 1px solid #dbe3ef;
         background: var(--input-bg);
         color: var(--text);
         outline: none;
+        transition: 0.16s ease;
       }
-      
 
       input:focus,
       select:focus,
       textarea:focus {
         border-color: #93c5fd;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
       }
 
       textarea {
         resize: vertical;
-        min-height: 120px;
+        min-height: 130px;
+        line-height: 1.5;
+      }
+
+      #permissionInput {
+        min-height: 150px;
+      }
+
+      #batchInput {
+        min-height: 135px;
       }
 
       .hint {
         font-size: 12px;
         color: var(--muted);
-        margin-top: 6px;
+        margin-top: 7px;
         line-height: 1.45;
       }
 
-      .actions {
+      .actions,
+      .permission-actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 12px;
+        margin-top: 14px;
       }
 
       button {
         border: 0;
-        padding: 11px 12px;
+        padding: 12px 14px;
         cursor: pointer;
         transition: 0.18s ease;
+        font-weight: 850;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
       }
 
       button.primary {
-        background: var(--primary);
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
         color: #fff;
-        font-weight: 700;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.24);
       }
 
       button.primary:hover {
-        background: var(--primary-hover);
+        transform: translateY(-1px);
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
       }
 
       button.secondary {
-        background: #eef2ff;
-        color: #1e3a8a;
-        font-weight: 700;
+        background: #eef4ff;
+        color: #1d4ed8;
+        border: 1px solid #dbeafe;
       }
 
       button.secondary:hover {
-        background: #e0e7ff;
+        background: #dbeafe;
       }
 
       button.ghost {
-        background: #f3f4f6;
-        color: #111827;
-        font-weight: 700;
+        background: #ffffff;
+        color: #0f172a;
+        border: 1px solid var(--line);
       }
 
       button.ghost:hover {
-        background: #e5e7eb;
-      }
-
-      .status {
-        padding: 12px;
-        border-radius: 12px;
-        background: var(--status-bg);
-        border: 1px solid var(--line);
-        font-size: 12px;
-        white-space: pre-wrap;
-        max-height: 320px;
-        overflow: auto;
-        line-height: 1.45;
+        background: #f8fafc;
       }
 
       .warning-box {
         border: 1px solid var(--warning-border);
         background: var(--warning-bg);
         color: var(--warning-text);
-        border-radius: 12px;
-        padding: 10px 12px;
+        border-radius: var(--radius-sm);
+        padding: 13px 14px;
         font-size: 12px;
         line-height: 1.45;
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
       }
+
+      .status {
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: var(--status-bg);
+        border: 1px solid var(--line);
+        font-size: 12px;
+        white-space: pre-wrap;
+        min-height: 95px;
+        max-height: 310px;
+        overflow: auto;
+        line-height: 1.45;
+      }
+
       .log-line {
-  padding: 6px 0;
-  line-height: 1.5;
-  border-bottom: 1px dashed #eef2f7;
-}
+        padding: 6px 0;
+        line-height: 1.5;
+        border-bottom: 1px dashed #e7edf5;
+      }
 
-.log-line:last-child {
-  border-bottom: 0;
-}
+      .log-line:last-child {
+        border-bottom: 0;
+      }
 
-.log-success {
-  color: #166534;
-  font-weight: 600;
-}
+      .log-success {
+        color: #166534;
+        font-weight: 700;
+      }
 
-.log-error {
-  color: #b91c1c;
-  font-weight: 600;
-}
+      .log-error {
+        color: #b91c1c;
+        font-weight: 700;
+      }
 
-.log-running {
-  color: #92400e;
-  font-weight: 600;
-}
+      .log-running {
+        color: #92400e;
+        font-weight: 700;
+      }
 
-.log-section {
-  color: #1d4ed8;
-  font-weight: 700;
-  padding-top: 10px;
-}
+      .log-section {
+        color: #1d4ed8;
+        font-weight: 850;
+        padding-top: 10px;
+      }
 
-.log-link a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 700;
-}
+      .log-link a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 850;
+      }
 
-.log-link a:hover {
-  text-decoration: underline;
-}
+      .log-link a:hover {
+        text-decoration: underline;
+      }
 
-.log-divider {
-  height: 1px;
-  background: #e5e7eb;
-  margin: 10px 0;
-}
+      .log-divider {
+        height: 1px;
+        background: #e5e7eb;
+        margin: 10px 0;
+      }
+
+      @media (max-width: 1120px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          display: none;
+        }
+
+        .shell {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .main {
+          padding: 14px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .actions,
+        .permission-actions {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
+
   <body>
-    <div class="page">
-      <div class="app">
-        <div class="card hero">
-          <h3>Bot Ads Manager</h3>
-          <div class="sub">Tạo campaign, ad set, chọn post và publish theo full flow.</div>
-        </div>
-        <div class="card">
-          <div class="auth-box auth-box-has-avatar">
-            <div class="fb-avatar-wrap" id="fbAvatarWrap" style="display:none;">
-              <img id="fbAvatar" class="fb-avatar" src="" alt="Facebook Avatar" />
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="logo">🤖</div>
+        <div class="nav-item active">▦</div>
+        <div class="nav-item">↗</div>
+        <div class="nav-item">⚙</div>
+        <div class="sidebar-spacer"></div>
+        <div class="nav-item">☼</div>
+        <div class="nav-item">⇥</div>
+      </aside>
+
+      <main class="main">
+        <div class="topbar">
+          <div class="title">
+            <h1>Bot Ads Manager</h1>
+            <p>Bên trái quản lý kết nối/quyền, bên phải chạy full luồng ads.</p>
+          </div>
+
+          <div class="top-actions">
+            <div class="system-pill">
+              <span class="dot"></span>
+              Hệ thống hoạt động tốt
             </div>
-        
-            <div class="auth-title">Kết nối Facebook</div>
-            <div id="authStatus" class="auth-status">Đang kiểm tra trạng thái kết nối...</div>
-            <div id="fbIdentity" class="hint" style="display:none;"></div>
-        
-            <button id="loginFacebookBtn" type="button" class="secondary">
-              Đăng nhập Facebook
-            </button>
+            <div class="user-avatar">👤</div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="grid">
-            <div>
-              <label for="backendUrl">Backend URL</label>
-              <input id="backendUrl" value="https://adsmanager-production-b20a.up.railway.app/" />
+        <div class="layout">
+          <section class="left">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">f</div>
+                <div>
+                  <h2 class="card-title">Kết nối Facebook</h2>
+                  <p class="card-subtitle">Đăng nhập để tool lấy token tự động và gọi Meta API.</p>
+                </div>
+              </div>
+
+              <div class="auth-box auth-box-has-avatar">
+                <div class="fb-avatar-wrap" id="fbAvatarWrap" style="display:none;">
+                  <img id="fbAvatar" class="fb-avatar" src="" alt="Facebook Avatar" />
+                </div>
+
+                <div class="auth-title">Trạng thái kết nối</div>
+                <div id="authStatus" class="auth-status">Đang kiểm tra trạng thái kết nối...</div>
+                <div id="fbIdentity" class="hint" style="display:none;"></div>
+
+                <button id="loginFacebookBtn" type="button" class="primary">
+                  f Đăng nhập Facebook
+                </button>
+              </div>
             </div>
 
-            <div>
-              <label for="adAccountId">Ad Account ID</label>
-              <input id="adAccountId" value="act_1438369167333697" />
-            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">🛡</div>
+                <div>
+                  <h2 class="card-title">Quản lý quyền Page</h2>
+                  <p class="card-subtitle">Dùng để check quyền hoặc thêm/request quyền Page vào Business.</p>
+                </div>
+              </div>
 
-            <div>
-              <label for="objective">Objective</label>
-              <select id="objective">
-                <option value="OUTCOME_ENGAGEMENT">OUTCOME_ENGAGEMENT</option>
-              </select>
-            </div>
+              <div class="grid">
+                <div>
+                  <label for="businessId">Business ID cần thêm quyền vào</label>
+                  <input id="businessId" placeholder="VD: 1568088500224087" />
+                  <div class="hint">Lấy trong Business Settings → Business Info → Business ID.</div>
+                </div>
 
-            <div>
-              <label for="postId">Post ID dùng cho ad</label>
-              <input id="postId" placeholder="123456789_987654321" />
-              <div class="hint">Để trống nếu muốn backend tự chọn bài viết hợp lệ đầu tiên.</div>
-            </div>
+                <div>
+                  <label for="permissionInput">Danh sách ID cần thêm/check quyền</label>
+                  <textarea id="permissionInput" placeholder="61577697758830
+61577761775494
+61577427975879"></textarea>
+                  <div class="hint">
+                    Mỗi dòng 1 ID. Có thể nhập ID sếp gửi, URL Page, hoặc Page ID thật.
+                    Nếu để trống, tool sẽ dùng danh sách pageId chạy ads bên phải.
+                  </div>
+                </div>
+              </div>
 
-            <div>
-              <label for="defaultPageName">Page Name dùng chung</label>
-              <input id="defaultPageName" placeholder="Để trống để lấy pageName = pageId" />
-              <div class="hint">Nếu để trống, mỗi page sẽ tự dùng pageId làm pageName.</div>
-            </div>
+              <div class="permission-actions">
+                <button id="permissionCheckBtn" class="secondary" type="button">
+                  ✓ Check quyền ID
+                </button>
 
-            <div>
-              <label for="defaultBudget">Budget áp dụng cho tất cả pageId</label>
-              <input id="defaultBudget" type="number" min="1" value="100" placeholder="100" />
-              <div class="hint">Ví dụ nhập 100 thì toàn bộ danh sách pageId sẽ chạy budget 100.</div>
-            </div>
+                <button id="requestAccessBtn" class="secondary" type="button">
+                  ✚ Thêm quyền vào Business
+                </button>
+              </div>
 
-            <div>
-              <label for="batchInput">Danh sách pageId</label>
-              <textarea id="batchInput" placeholder="61551441819219
+              
+            </div>
+          </section>
+
+          <section class="right">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">🚀</div>
+                <div>
+                  <h2 class="card-title">Cấu hình chạy ads</h2>
+                  <p class="card-subtitle">Nhập thông tin để tạo campaign, ad set, ad và publish.</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="full">
+                  <label for="backendUrl">Backend URL</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🔗</span>
+                    <input id="backendUrl" value="https://adsmanager-production-b20a.up.railway.app/" />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="adAccountId">Ad Account ID</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">♙</span>
+                    <input id="adAccountId" value="act_1438369167333697" />
+                  </div>
+                  <div class="hint">Ad account dùng để tạo campaign/ad set/ad.</div>
+                </div>
+
+                <div>
+                  <label for="objective">Objective</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">◎</span>
+                    <select id="objective">
+                      <option value="OUTCOME_ENGAGEMENT">OUTCOME_ENGAGEMENT</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="postId">Post ID dùng cho ad</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">▤</span>
+                    <input id="postId" placeholder="123456789_987654321" />
+                  </div>
+                  <div class="hint">Để trống nếu muốn backend tự chọn bài viết hợp lệ đầu tiên.</div>
+                </div>
+
+                <div>
+                  <label for="defaultPageName">Page Name dùng chung</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">▤</span>
+                    <input id="defaultPageName" placeholder="Để trống để lấy pageName = pageId" />
+                  </div>
+                  <div class="hint">Nếu để trống, mỗi page sẽ tự dùng pageId làm pageName.</div>
+                </div>
+
+                <div>
+                  <label for="defaultBudget">Budget áp dụng cho tất cả pageId</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">$</span>
+                    <input id="defaultBudget" type="number" min="1" value="100" placeholder="100" />
+                  </div>
+                  <div class="hint">Ví dụ nhập 100 thì toàn bộ danh sách pageId sẽ chạy budget 100.</div>
+                </div>
+
+                <div class="full">
+                  <label for="batchInput">Danh sách pageId để chạy ads</label>
+                  <textarea id="batchInput" placeholder="61551441819219
 123456789012345
 987654321098765"></textarea>
-              <div class="hint">Mỗi dòng 1 pageId. Không cần nhập pageName và budget trong danh sách.</div>
+                  <div class="hint">
+                    Mỗi dòng 1 pageId để chạy ads. Có thể dùng format: ID sếp gửi | Page ID thật.
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="warning-box">
-          Flow hiện tại ưu tiên API. Website chỉ gọi backend, không phụ thuộc UI Ads Manager.
-        </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">⚡</div>
+                <div>
+                  <h2 class="card-title">Chạy full luồng</h2>
+                  <p class="card-subtitle">Chạy bằng Ad Account và danh sách pageId ở phần cấu hình phía trên.</p>
+                </div>
+              </div>
 
-        <div class="actions">
-          <button id="runFullFlowBtn" class="primary">Chạy full luồng 1-7</button>
-          <button id="openAdsManagerBtn" class="ghost">Mở Ads Manager</button>
-        </div>
+              <div class="actions">
+                <button id="runFullFlowBtn" class="primary" type="button">
+                  ▶ Chạy full luồng 1-7
+                </button>
 
-        <div id="status" class="status">Chưa chạy.</div>
-      </div>
+                <button id="openAdsManagerBtn" class="ghost" type="button">
+                  ↗ Mở Ads Manager
+                </button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">▤</div>
+                <div>
+                  <h2 class="card-title">Log</h2>
+                </div>
+              </div>
+
+              <div id="status" class="status">Chưa chạy.</div>
+            </div>
+          </section>
+        </div>
+      </main>
     </div>
 
     <script src="./app.js"></script>

@@ -16,7 +16,10 @@ import {
   getAdAccount,
   getAdSet,
   getAd,
-  listCampaigns
+  listCampaigns,
+  scanPermissions,
+  classifyMetaError,
+  requestPageAccessToBusiness
 } from './metaApi.js';
 import {
   readTokenStore,
@@ -61,6 +64,65 @@ app.get('/accounts/:adAccountId', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+
+app.post('/permissions/scan', async (req, res) => {
+  try {
+    const { adAccountId, pageIds } = req.body;
+
+    if (!adAccountId) return res.status(400).json({ error: 'Missing adAccountId' });
+    if (!Array.isArray(pageIds)) return res.status(400).json({ error: 'Missing pageIds' });
+
+    const data = await scanPermissions({ adAccountId, pageIds });
+    res.json({ ok: true, ...data });
+  } catch (err) {
+    res.status(400).json({
+      ok: false,
+      error: err.message,
+      errorType: err.errorType || classifyMetaError(err.message)
+    });
+  }
+});
+
+
+app.post('/permissions/request-page-access', async (req, res) => {
+  try {
+    const {
+      businessId,
+      pageIds = [],
+      permittedTasks = ['ADVERTISE', 'CREATE_CONTENT']
+    } = req.body || {};
+
+    if (!businessId) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Missing businessId'
+      });
+    }
+
+    if (!Array.isArray(pageIds) || !pageIds.length) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Missing pageIds'
+      });
+    }
+
+    const result = await requestPageAccessToBusiness({
+      businessId,
+      pageIds,
+      permittedTasks
+    });
+
+    return res.json(result);
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      error: err.message || 'Request page access failed',
+      errorType: err.errorType || 'UNKNOWN',
+      meta: err.meta || null
+    });
   }
 });
 
@@ -271,7 +333,10 @@ app.post('/flow/run-full-draft', async (req, res) => {
         : null
     });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({
+      error: err.message,
+      errorType: err.errorType || classifyMetaError(err.message)
+    });
   }
 });
 
@@ -701,6 +766,32 @@ async function exchangeLongLivedUserToken(shortLivedUserToken) {
 }
 
 
+app.get('/auth/permissions', async (_req, res) => {
+  try {
+    const store = readTokenStore();
+
+    if (!store?.userToken) {
+      return res.status(400).json({
+        ok: false,
+        error: 'No token'
+      });
+    }
+
+    const url =
+      `https://graph.facebook.com/v23.0/me/permissions` +
+      `?access_token=${encodeURIComponent(store.userToken)}`;
+
+    const fbRes = await fetch(url);
+    const data = await fbRes.json();
+
+    return res.status(fbRes.ok ? 200 : 400).json(data);
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      error: err.message || 'Cannot read permissions'
+    });
+  }
+});
 
 app.get('/auth/facebook/start', (_req, res) => {
   if (!FB_APP_ID) {
@@ -717,10 +808,11 @@ app.get('/auth/facebook/start', (_req, res) => {
   ].join(',');
 
   const authUrl =
-    `https://www.facebook.com/v23.0/dialog/oauth` +
-    `?client_id=${encodeURIComponent(FB_APP_ID)}` +
-    `&redirect_uri=${encodeURIComponent(FB_REDIRECT_URI)}` +
-    `&scope=${encodeURIComponent(scope)}`;
+  `https://www.facebook.com/v23.0/dialog/oauth` +
+  `?client_id=${encodeURIComponent(FB_APP_ID)}` +
+  `&redirect_uri=${encodeURIComponent(FB_REDIRECT_URI)}` +
+  `&scope=${encodeURIComponent(scope)}` +
+  `&auth_type=rerequest`;
 
   res.redirect(authUrl);
 });
